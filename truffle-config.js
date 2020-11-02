@@ -20,7 +20,7 @@
 
  const HDWalletProvider = require('@truffle/hdwallet-provider');
  const infuraKey = "7d95af5f819349ef897f8ccc9b943e1d";
-// //
+//
  const fs = require('fs');
  const mnemonic = fs.readFileSync(".secret").toString().trim();
 
@@ -67,7 +67,7 @@ module.exports = {
        confirmations: 2,    // # of confs to wait between deployments. (default: 0)
        timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
        skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
-     }
+     },
 
     // Useful for private networks
     // private: {
