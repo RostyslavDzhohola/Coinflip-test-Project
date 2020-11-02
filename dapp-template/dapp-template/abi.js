@@ -1,4 +1,4 @@
-var abi = [
+var abi =  [
   {
     "inputs": [],
     "payable": true,
@@ -23,6 +23,43 @@ var abi = [
     "inputs": [
       {
         "indexed": false,
+        "internalType": "bytes32",
+        "name": "ID",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "bettingBalance",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "Active",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "AddressPlaying",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "Result",
+        "type": "uint256"
+      }
+    ],
+    "name": "PlayerInserted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "string",
         "name": "",
         "type": "string"
@@ -37,8 +74,14 @@ var abi = [
       {
         "indexed": false,
         "internalType": "bool",
-        "name": "",
+        "name": "result",
         "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "balance",
+        "type": "uint256"
       }
     ],
     "name": "coindflipResult",
@@ -88,9 +131,44 @@ var abi = [
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [],
+    "name": "win_loose",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [],
     "name": "coinflipSet",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_betBalance",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_addressPlayig",
+        "type": "address"
+      }
+    ],
+    "name": "update",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
@@ -145,15 +223,15 @@ var abi = [
     "constant": false,
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "betBalance",
-        "type": "uint256"
+        "internalType": "bytes32",
+        "name": "_queryId",
+        "type": "bytes32"
       }
     ],
-    "name": "update",
+    "name": "coinflipGet",
     "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
