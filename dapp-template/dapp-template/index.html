@@ -32,6 +32,9 @@
         <div class="input-group mb-3">
           <p>Did you win? &ensp; </p>
           <span id="win_output"></span>
+          <div id="loader" style="margin-left:15px; display:none;">
+            <img src="images\ajax-loader2.gif">
+          </div>
         </div>
         <div class="input-group mb-3">
           <button type="button" id="bet_button" class="btn btn-secondary"> Bet </button>
@@ -39,9 +42,15 @@
         <div class="input-group mb-3">
           <input type="number" class="form-control" id="bet_input" placeholder="Amount" >
         </div>
+        <div class="input-group mb-3">
+          <button type="button" id="check_button" class="btn btn-secondary"> Check result </button>
+        </div>
         <div class="input-group mb-4">
           <p> Result &ensp; </p>
           <span  id="bet_result"></span>
+          <div id="loader2" style="margin-left:15px; display:none;">
+            <img src="images\ajax-loader2.gif">
+          </div>
         </div>
         <div class="input-group mb-3">
           <button type="button" id="withdrawAll_button" class="btn btn-primary"> Withdraw All </button>
