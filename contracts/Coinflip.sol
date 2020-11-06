@@ -8,12 +8,13 @@ contract Coinflip is usingProvable{
     uint betPlayerBalance;
     uint bettingRes;
     bool isWating;
+    bool resultReturned;
     address adrPlaying;
   }
-
+  
   mapping(bytes32 => Player) private players_byID;
+  mapping(address => bytes32) private bytesId_addr; // change pointer from bool to bytes32
   mapping(address => bool) private isPlaying;
-
 
   uint public balance;
   address internal owner;
@@ -38,10 +39,10 @@ contract Coinflip is usingProvable{
   }
 
   event LogNewProvableQuery(string description);
-  event generatedRandomNumber(uint256 randomNumber);
+  event generatedRandomNumber(uint256 randomNumber, bytes32 Player_ID);
 
   event coinFlipped(string);
-  event coindflipResult(bool result, uint balance);
+  event coindflipResult(bool result, uint Player_Bet, bool Callback_Returned);
   event PlayerInserted(bytes32 ID, uint bettingBalance, bool Active, address AddressPlaying, uint256 Result);
   //event testRandomExecuted(string, bytes32);
   //event returnedPlayer(uint balance, bool Active, address AddressPlaying);
@@ -52,9 +53,11 @@ contract Coinflip is usingProvable{
     require(isPlaying[msg.sender] == false, "Current address is in paly");
     require(msg.value >= 100000000000 wei);
     require(msg.value <= balance);
-    balance -= 4000000000000000;
     isPlaying[msg.sender] = true;
+    balance -= 4000000000000000;  // Payment for generating rundom number
+
     uint256 betBalance = msg.value;
+    balance += betBalance;
     emit coinFlipped("CoinflipSet() function successfuly executed");
     update(betBalance, msg.sender);
   }
@@ -73,8 +76,7 @@ contract Coinflip is usingProvable{
         NUM_RANDOM_BYTES_REQUESTED,
         GAS_FOR_CALLBACK
       );
-
-
+    bytesId_addr[msg.sender] = queryId;
     emit LogNewProvableQuery("Provable query was sent, standing by for the answer...");
     insertPlayer(queryId, _betBalance, _addressPlayig);
     }
@@ -90,14 +92,14 @@ contract Coinflip is usingProvable{
     require(msg.sender == provable_cbAddress());
     uint256 randomNumber = uint256(keccak256(abi.encodePacked(_result))) % 2;
     latestNumber = randomNumber;
-    emit generatedRandomNumber(randomNumber);
+    emit generatedRandomNumber(randomNumber, _queryId);
     updateResult(_queryId, randomNumber);
   }
 
   function updateResult(bytes32 id, uint256 randomNumber) private {
     players_byID[id].bettingRes = randomNumber;
+    players_byID[id].resultReturned = true;
     //emit callbackReturned(players_byID[id].betPlayerBalance, players_byID[id].bettingRes, players_byID[id].isWating);
-    coinflipGet(id);
   }
 
   function insertPlayer(bytes32 _queryId, uint _betBalance, address _addressPlayig) private {
@@ -114,12 +116,13 @@ contract Coinflip is usingProvable{
     emit PlayerAfterInserted(_id, dummyPlayer.betPlayerBalance, dummyPlayer.bettingRes, dummyPlayer.isWating, dummyPlayer.adrPlaying);
   } */
 
-  function coinflipGet(bytes32 _queryId) public {
-
+  function coinflipGet() public returns(bool){
+    require(isPlaying[msg.sender] = true, "Player is not in play");
+    require(players_byID[bytesId_addr[msg.sender]].resultReturned == true, "Random number have not been returend.");
+    isPlaying[msg.sender] = false;
+    bytes32 qId = bytesId_addr[msg.sender];
     Player memory oldPlayer;
-    oldPlayer = players_byID[_queryId];
-
-    isPlaying[oldPlayer.adrPlaying] = false;
+    oldPlayer = players_byID[qId];
 
     uint betBalance = oldPlayer.betPlayerBalance;
     uint toTransafer = 0;
@@ -129,16 +132,17 @@ contract Coinflip is usingProvable{
     if(luck == 1){
       win_loose = true;
       toTransafer = betBalance *2;
-      balance -= betBalance;
+      balance -= toTransafer;
       returningPlayer.transfer(toTransafer);
     } else {
         win_loose = false;
         toTransafer = 0;
-        balance += betBalance;
     }
-
   //  emit returnedPlayer(oldPlayer.betPlayerBalance, oldPlayer.isWating, oldPlayer.adrPlaying);
-    emit coindflipResult(win_loose, betBalance);
+    emit coindflipResult(win_loose, betBalance, true);
+    delete(players_byID[qId]);
+    delete(bytesId_addr[msg.sender]);
+    return win_loose ;
   }
 
   function withdrawAll() public onlyOwner returns(uint){
