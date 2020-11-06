@@ -80,8 +80,14 @@ var abi =  [
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "balance",
+        "name": "Player_Bet",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "Callback_Returned",
+        "type": "bool"
       }
     ],
     "name": "coindflipResult",
@@ -95,6 +101,12 @@ var abi =  [
         "internalType": "uint256",
         "name": "randomNumber",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "Player_ID",
+        "type": "bytes32"
       }
     ],
     "name": "generatedRandomNumber",
@@ -221,15 +233,15 @@ var abi =  [
   },
   {
     "constant": false,
-    "inputs": [
+    "inputs": [],
+    "name": "coinflipGet",
+    "outputs": [
       {
-        "internalType": "bytes32",
-        "name": "_queryId",
-        "type": "bytes32"
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
-    "name": "coinflipGet",
-    "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
