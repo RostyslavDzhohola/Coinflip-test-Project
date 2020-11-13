@@ -44,10 +44,6 @@ contract Coinflip is usingProvable{
   event coinFlipped(string);
   event coindflipResult(bool result, uint Player_Bet, bool Callback_Returned);
   event PlayerInserted(bytes32 ID, uint bettingBalance, bool Active, address AddressPlaying, uint256 Result);
-  //event testRandomExecuted(string, bytes32);
-  //event returnedPlayer(uint balance, bool Active, address AddressPlaying);
-  //event callbackReturned(uint balance, uint256 randomNumber, bool Active);
-  //event PlayerAfterInserted(bytes32 ID, uint bettingBalance, uint256 Result, bool Active, address AddressPlaying);
 
   function coinflipSet() public payable costs(10000000000 wei){
     require(isPlaying[msg.sender] == false, "Current address is in paly");
@@ -65,7 +61,7 @@ contract Coinflip is usingProvable{
   function update(uint _betBalance, address _addressPlayig) payable public {
     uint256 QUERY_EXECUTION_DELAY = 0;
     uint256 GAS_FOR_CALLBACK = 200000;
-    //bytes32 queryId = testRandom(); // Comment this line on the Ropsten network.
+ 
 
     if (provable_getPrice("https://ropsten.etherscan.io/chart/gasprice", GAS_FOR_CALLBACK) > address(this).balance) {
       emit LogNewProvableQuery("Provable query was NOT send, please add some ETH to cover the query fee");
@@ -81,12 +77,6 @@ contract Coinflip is usingProvable{
     insertPlayer(queryId, _betBalance, _addressPlayig);
     }
   }
-  /* function testRandom() public returns(bytes32){
-   bytes32 newqueryId = bytes32(keccak256(abi.encodePacked(msg.sender)));
-   emit testRandomExecuted("The testRandom() function is successfuly executed ", newqueryId);
-   __callback(newqueryId, "0", bytes("test"));
-   return newqueryId;
-  } */
 
   function __callback(bytes32 _queryId, string memory _result, bytes memory _proof) public {
     require(msg.sender == provable_cbAddress());
@@ -107,14 +97,8 @@ contract Coinflip is usingProvable{
     players_byID[_queryId].isWating = true;
     players_byID[_queryId].adrPlaying = _addressPlayig;
     emit PlayerInserted(_queryId, players_byID[_queryId].betPlayerBalance, players_byID[_queryId].isWating, players_byID[_queryId].adrPlaying, players_byID[_queryId].bettingRes);
-    //testInsertedPlayer(_queryId);  //Comment out when deploying to Ropsten network
   }
 
-  /* function testInsertedPlayer(bytes32 _id) public {
-    Player memory dummyPlayer;
-    dummyPlayer = players_byID[_id];
-    emit PlayerAfterInserted(_id, dummyPlayer.betPlayerBalance, dummyPlayer.bettingRes, dummyPlayer.isWating, dummyPlayer.adrPlaying);
-  } */
 
   function coinflipGet() public returns(bool){
     require(isPlaying[msg.sender] = true, "Player is not in play");
