@@ -1,6 +1,6 @@
 # Coinflip-test-Project
 
-It is a simple gambeling project on the ropsten network where you can put your stake for a 50% of winning probability. Main skills that I have learned here are contract development, oracle integration, and web3 integration. 
+It is a simple gambling project on the ropsten network where you can put your stake for a 50% of winning probability. Main skills that I have learned here are contract development, oracle integration, and web3 integration. 
 
 How to Install. 
 1. Copy this reposytory on your machine. 
